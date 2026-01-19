@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document("tarefa")
+@Document("tarefas")
 public class TarefaEntity {
   @Id
   private String id;
