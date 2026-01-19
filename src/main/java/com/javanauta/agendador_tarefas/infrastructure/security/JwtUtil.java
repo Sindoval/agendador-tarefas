@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
@@ -12,17 +13,13 @@ import org.springframework.stereotype.Service;
 public class JwtUtil {
 
     // Chave secreta usada para assinar e verificar tokens JWT
-    private final SecretKey secretKey;
-
-    public JwtUtil() {
-        this.secretKey = Keys.secretKeyFor((SignatureAlgorithm.HS256));
-    }
+    private final String secretKey = "sua_chave_secreta_super_segura_que_deve_ser_bem_longa";
 
 
     // Extrai as claims do token JWT (informações adicionais do token)
     public Claims extractClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey) // Define a chave secreta para validar a assinatura do token
+                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8))) // Define a chave secreta para validar a assinatura do token
                 .build()
                 .parseClaimsJws(token) // Analisa o token JWT e obtém as claims
                 .getBody(); // Retorna o corpo das claims
