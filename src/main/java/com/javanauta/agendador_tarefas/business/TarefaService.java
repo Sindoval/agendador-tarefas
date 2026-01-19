@@ -8,6 +8,7 @@ import com.javanauta.agendador_tarefas.infrastructure.enums.StatusNotificacaoEnu
 import com.javanauta.agendador_tarefas.infrastructure.repository.TarefasRepository;
 import com.javanauta.agendador_tarefas.infrastructure.security.JwtUtil;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,4 +34,15 @@ public class TarefaService {
     return tarefaConverter.paraTarefaDTO(tarefasRepository.save(tarefaEntity));
   }
 
+  public List<TarefaDTO> buscaTarefasAgendadasPorPeriodo(LocalDateTime dataInical, LocalDateTime dataFinal) {
+    return tarefaConverter.paraListTarefasDTO(
+        tarefasRepository.findByDataEventoBetween(dataInical, dataFinal)
+    );
+  }
+
+  public List<TarefaDTO> buscaTarefaPorEmail(String token) {
+    String email = jwtUtil.extractUsername(token.substring(7));
+    return tarefaConverter.paraListTarefasDTO(
+        tarefasRepository.findByEmailUsuario(email));
+  }
 }
