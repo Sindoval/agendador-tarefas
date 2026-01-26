@@ -3,7 +3,6 @@ package com.javanauta.agendador_tarefas.controller;
 import com.javanauta.agendador_tarefas.business.TarefaService;
 import com.javanauta.agendador_tarefas.business.dto.TarefaDTO;
 import com.javanauta.agendador_tarefas.infrastructure.enums.StatusNotificacaoEnum;
-import com.javanauta.agendador_tarefas.infrastructure.exceptions.ResourceNotFound;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
