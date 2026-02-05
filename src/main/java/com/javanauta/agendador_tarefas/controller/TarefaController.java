@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,9 +62,19 @@ public class TarefaController {
     return ResponseEntity.ok(tarefaService.alteraStatus(status, id));
   }
 
+  @PatchMapping("/email")
+  public ResponseEntity<Void> atualizarEmailTarefas(@RequestBody String newEmail,
+      @RequestParam String oldEmail,
+      @RequestHeader("Authorization") String token) {
+    tarefaService.atualizarEmailTarefas(newEmail, oldEmail, token);
+    return ResponseEntity.ok().build();
+  }
+
   @PutMapping
   public ResponseEntity<TarefaDTO> updateTarefa(@RequestBody TarefaDTO tarefaDTO,
       @RequestParam("id") String id) {
     return ResponseEntity.ok(tarefaService.updateTarefas(tarefaDTO, id));
   }
+
+
 }

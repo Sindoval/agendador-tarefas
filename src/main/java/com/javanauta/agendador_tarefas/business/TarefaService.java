@@ -7,6 +7,7 @@ import com.javanauta.agendador_tarefas.infrastructure.client.UsuarioClient;
 import com.javanauta.agendador_tarefas.infrastructure.entity.TarefaEntity;
 import com.javanauta.agendador_tarefas.infrastructure.enums.StatusNotificacaoEnum;
 import com.javanauta.agendador_tarefas.infrastructure.exceptions.ResourceNotFoundException;
+import com.javanauta.agendador_tarefas.infrastructure.exceptions.UnauthorizedException;
 import com.javanauta.agendador_tarefas.infrastructure.repository.TarefasRepository;
 import com.javanauta.agendador_tarefas.infrastructure.security.JwtUtil;
 import java.time.LocalDateTime;
@@ -83,5 +84,23 @@ public class TarefaService {
     } catch (ResourceNotFoundException e) {
       throw new ResourceNotFoundException("Erro ao alterar status da tarefa " + e.getCause());
     }
+  }
+
+  //usar mensageria futuramente
+  public void atualizarEmailTarefas(String newEmail, String oldEmail, String token) {
+    String emailToken = jwtUtil.extractUsername(token.substring(7));
+
+    if (!emailToken.equals(newEmail)) {
+      throw new UnauthorizedException("Você não tem permissão para alterar essas tarefas!");
+    }
+
+    List<TarefaEntity> tarefas = tarefasRepository.findByEmailUsuario(oldEmail);
+
+    if(!tarefas.isEmpty()) {
+      tarefas.stream().forEach(tarefa -> {
+        tarefa.setEmailUsuario(newEmail);
+      });
+    }
+    tarefasRepository.saveAll(tarefas);
   }
 }
